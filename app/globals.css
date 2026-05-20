@@ -1,26 +1,107 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme {
+  --color-cream: #f9f6f0;
+  --color-emerald: #059669;
+  --color-gold: #c8a45d;
+  --font-family-sans: var(--font-sans), "Jost", sans-serif;
+  --font-family-serif: var(--font-serif), "Cormorant Garamond", serif;
+  --font-family-arabic: var(--font-arabic), "Noto Naskh Arabic", serif;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
+@layer base {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --emerald: #059669;
+    --gold: #c8a45d;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: #f9f6f0; /* cream background */
+    color: #1f2937;
+    font-family: var(--font-family-sans);
+    overflow-x: hidden;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-family-serif);
+    font-weight: 500;
+    color: #111827;
+  }
+
+  ::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #e5e0d5;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: rgba(5, 150, 105, 0.4);
+    border-radius: 8px;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer components {
+  .card-white {
+    background-color: #ffffff;
+    border-radius: 1.5rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02), 0 1px 2px rgba(0, 0, 0, 0.03);
+    transition: all 0.3s ease;
+  }
+
+  .card-white:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 30px -12px rgba(0, 0, 0, 0.08);
+  }
+
+  .section-container {
+    max-width: 80rem;
+    margin-inline: auto;
+    padding-inline: 1.5rem;
+    padding-block: 5rem;
+  }
+
+  @media (min-width: 768px) {
+    .section-container {
+      padding-inline: 3rem;
+      padding-block: 6rem;
+    }
+  }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition:
+      opacity 0.8s ease,
+      transform 0.8s ease;
+  }
+
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@layer utilities {
+  .font-arabic {
+    font-family: var(--font-family-arabic);
+  }
+
+  .shadow-emerald-glow {
+    box-shadow: 0 0 30px rgba(5, 150, 105, 0.15);
+  }
+
+  .shadow-gold-glow {
+    box-shadow: 0 0 30px rgba(200, 164, 93, 0.1);
+  }
 }
