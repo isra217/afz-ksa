@@ -1,7 +1,14 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { MessageCircle, X, Bot, Send, Phone, CircleDot } from "lucide-react";
+import {
+  MessageCircle,
+  X,
+  Bot,
+  Send,
+  Phone,
+  CircleDot,
+} from "lucide-react";
 
 type Message = {
   type: "bot" | "user";
@@ -23,11 +30,11 @@ export default function FloatingChat() {
     {
       type: "bot",
       text:
-        "Welcome to AFZ Global. Ask anything about our services, pricing, or timelines.",
+        "Welcome to AFZ Global.\nAsk anything about websites, apps, SEO, AI, accounting or company formation.",
       suggestions: [
         "What services do you offer?",
-        "How much does a website cost?",
-        "How long does development take?",
+        "Website pricing",
+        "App development timeline",
         "Contact details",
       ],
     },
@@ -37,21 +44,24 @@ export default function FloatingChat() {
   useEffect(() => {
     if (!chatBodyRef.current) return;
 
-    chatBodyRef.current.scrollTo({
-      top: chatBodyRef.current.scrollHeight,
-      behavior: "smooth",
+    requestAnimationFrame(() => {
+      chatBodyRef.current?.scrollTo({
+        top: chatBodyRef.current.scrollHeight,
+        behavior: "smooth",
+      });
     });
   }, [messages, typing]);
 
-  /* ================= INTENT DETECTOR ================= */
+  /* ================= INTENT DETECTION ================= */
   const detectIntent = (msg: string) => {
     const text = msg.toLowerCase();
 
-    if (text.match(/service|what do you do|offer/)) return "services";
+    if (text.match(/service|what do you|offer|do you provide/))
+      return "services";
     if (text.match(/web|website|site/)) return "website";
     if (text.match(/app|mobile|ios|android/)) return "app";
     if (text.match(/price|cost|budget|charges/)) return "pricing";
-    if (text.match(/time|duration|long|weeks|days/)) return "timeline";
+    if (text.match(/time|duration|long|weeks|days|how long/)) return "timeline";
     if (text.match(/seo|marketing|ads/)) return "seo";
     if (text.match(/ai|automation|bot/)) return "ai";
     if (text.match(/contact|whatsapp|email/)) return "contact";
@@ -59,66 +69,77 @@ export default function FloatingChat() {
     return "unknown";
   };
 
-  /* ================= RESPONSES ================= */
+  /* ================= RESPONSES ENGINE ================= */
   const RESPONSES: Record<string, Message> = {
     services: {
+      type: "bot",
       text:
-        "We provide website development, mobile apps, SEO, AI automation, accounting, and company setup services.",
+        "We provide:\n• Website Development\n• Mobile Apps\n• SEO & Marketing\n• AI Automation\n• Accounting\n• Company Formation",
       suggestions: ["Website details", "App details", "AI automation"],
     },
 
     website: {
+      type: "bot",
       text:
-        "We build business websites, ecommerce stores, portfolios, and custom platforms. Delivery time is 2–4 weeks depending on requirements.",
+        "We build business websites, ecommerce stores, portfolios, and custom systems.\n\nTimeline: 2–4 weeks depending on requirements.",
       suggestions: [
         "Website pricing",
         "Do you build ecommerce?",
-        "Can you redesign website?",
+        "Can you redesign my website?",
       ],
     },
 
     app: {
+      type: "bot",
       text:
-        "We develop Android and iOS apps including business and ecommerce applications. Timeline is 4–8 weeks.",
-      suggestions: ["App pricing", "iOS apps?", "App maintenance?"],
+        "We develop Android and iOS apps including business and ecommerce apps.\n\nTimeline: 4–8 weeks.",
+      suggestions: ["App pricing", "Do you build iOS apps?", "Maintenance?"],
     },
 
     pricing: {
+      type: "bot",
       text:
-        "Pricing depends on project requirements. Websites are affordable, apps are medium to high, AI is custom priced.",
+        "Pricing depends on requirements:\n• Website → Affordable\n• App → Medium to High\n• AI → Custom pricing\n\nContact us for exact quote.",
       suggestions: ["Website cost", "App cost", "SEO cost"],
     },
 
     timeline: {
+      type: "bot",
       text:
-        "Timelines vary: websites 2–4 weeks, apps 4–8 weeks, SEO 2–4 months.",
+        "Project timelines:\n• Websites: 2–4 weeks\n• Apps: 4–8 weeks\n• SEO: 2–4 months",
       suggestions: ["Fast delivery?", "Urgent project?", "Updates?"],
     },
 
     seo: {
+      type: "bot",
       text:
-        "We offer SEO, Google ranking, ads management, and social media marketing services.",
+        "We provide SEO, Google ranking, ads management, and social media marketing.",
       suggestions: ["Google Ads?", "Instagram marketing?"],
     },
 
     ai: {
+      type: "bot",
       text:
-        "We build AI automation systems, chatbots, CRM systems, and business workflows.",
+        "We build AI chatbots, automation systems, CRM tools, and business workflows.",
       suggestions: ["Build chatbot?", "AI pricing?"],
     },
 
     contact: {
+      type: "bot",
       text:
-        `Contact us via WhatsApp: ${WHATSAPP}\nOr fill the contact form on our website.`,
+        "Contact us:\nWhatsApp: " +
+        WHATSAPP +
+        "\nOr use our contact form on website.",
       suggestions: ["Open WhatsApp", "Contact form"],
     },
   };
 
   /* ================= FALLBACK ================= */
-  const fallbackResponse = (msg: string): Message => {
+  const fallbackResponse = (): Message => {
     return {
+      type: "bot",
       text:
-        "I may not have an exact answer for that, but our team can help you directly.",
+        "I don't have a direct answer for that, but our team can help you instantly.",
       suggestions: ["Contact on WhatsApp", "Fill contact form", "View services"],
     };
   };
@@ -137,7 +158,7 @@ export default function FloatingChat() {
 
       const response =
         intent === "unknown"
-          ? fallbackResponse(text)
+          ? fallbackResponse()
           : RESPONSES[intent];
 
       setMessages((prev) => [
@@ -150,7 +171,7 @@ export default function FloatingChat() {
       ]);
 
       setTyping(false);
-    }, 500);
+    }, 600);
   };
 
   return (
@@ -169,19 +190,13 @@ export default function FloatingChat() {
         onClick={() => setOpen(!open)}
         className="fixed bottom-8 right-5 z-50 w-14 h-14 bg-[#C8A96B] rounded-full flex items-center justify-center shadow-xl"
       >
-        {open ? (
-          <X className="text-white" />
-        ) : (
-          <MessageCircle className="text-white" />
-        )}
+        {open ? <X className="text-white" /> : <MessageCircle className="text-white" />}
       </button>
 
       {/* CHAT WINDOW */}
       <div
         className={`fixed bottom-28 right-5 z-50 w-[92%] sm:w-[400px] h-[70vh] rounded-2xl overflow-hidden shadow-2xl border bg-white flex flex-col transition-all ${
-          open
-            ? "opacity-100"
-            : "opacity-0 pointer-events-none translate-y-10"
+          open ? "opacity-100" : "opacity-0 pointer-events-none translate-y-10"
         }`}
       >
         {/* HEADER */}
@@ -223,7 +238,6 @@ export default function FloatingChat() {
                 </div>
               </div>
 
-              {/* Suggestions */}
               {m.type === "bot" && m.suggestions && (
                 <div className="flex flex-wrap gap-2 mt-2">
                   {m.suggestions.map((s, idx) => (
@@ -241,7 +255,9 @@ export default function FloatingChat() {
           ))}
 
           {typing && (
-            <div className="text-xs text-gray-500">typing...</div>
+            <div className="text-xs text-gray-500">
+              typing...
+            </div>
           )}
         </div>
 
