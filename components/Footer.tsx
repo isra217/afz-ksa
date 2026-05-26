@@ -1,119 +1,149 @@
+"use client";
+import { useRef } from "react";
+import { motion, useInView } from "framer-motion";
 import Image from "next/image";
 import { Mail, MapPin, Send } from "lucide-react";
 
 export default function Footer() {
+  const sectionRef = useRef<HTMLElement>(null);
+  const isInView = useInView(sectionRef, { once: true, margin: "-50px" });
+
+  const fadeInUp = {
+    hidden: { opacity: 0, y: 30 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
+  };
+
+  const fadeIn = {
+    hidden: { opacity: 0 },
+    visible: { opacity: 1, transition: { duration: 0.5, staggerChildren: 0.1 } },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 10 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.4 } },
+  };
+
   return (
-    <footer className="bg-[#F7F3EE] border-t border-[#C8A45D]/20 py-12">
+    <footer ref={sectionRef} className="bg-[#F7F3EE] border-t border-[#C8A45D]/20 py-12">
       <div className="max-w-7xl mx-auto px-6 md:px-12">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-10 mb-12">
-          {/* Brand Column with Logo */}
-          <div>
+        <motion.div
+          initial="hidden"
+          animate={isInView ? "visible" : "hidden"}
+          variants={fadeIn}
+          className="grid grid-cols-1 md:grid-cols-4 gap-10 mb-12"
+        >
+          {/* Brand Column with Logo + Name + Arabic (matches navbar style) */}
+          <motion.div variants={itemVariants}>
             <div className="flex items-center gap-3 mb-4">
-              <div className="relative w-10 h-10">
+              <div className="relative w-10 h-10 md:w-12 md:h-12">
                 <Image
-                  src="/logo.png" // change to your actual logo path
-                  alt="AFZ Global Logo"
+                  src="/logo.png"
+                  alt="AFZ Global"
                   fill
-                  className="object-contain"
+                  className="object-contain rounded-lg"
                 />
               </div>
-              <span className="text-xs tracking-[3px] uppercase text-gray-800 font-semibold">
-                AFZ / KSA
-              </span>
+              <div>
+                <div className="text-lg md:text-xl font-bold tracking-tight text-gray-900">
+                  AFZ Global
+                </div>
+                <div className="text-[9px] md:text-[10px] tracking-[2px] text-gold/80 font-arabic font-semibold mt-0.5">
+                  المملكة العربية السعودية
+                </div>
+              </div>
             </div>
             <p className="text-gray-600 text-sm leading-relaxed">
               Build, manage and scale your business in Saudi Arabia. Accounting, formation, web, apps, social, and AI — under one roof.
             </p>
-            <div className="font-arabic text-[#C8A45D]/50 text-2xl mt-4">
+            {/* Arabic phrase - darker and more visible */}
+            <div className="font-arabic text-gold/60 text-2xl mt-4 font-medium">
               شريكك في النجاح
             </div>
-          </div>
+          </motion.div>
 
           {/* Services */}
-          <div>
-            <h4 className="text-[10px] tracking-[3px] text-[#C8A45D] font-semibold mb-5 uppercase">
+          <motion.div variants={itemVariants}>
+            <h4 className="text-[10px] tracking-[3px] text-gold font-semibold mb-5 uppercase">
               Services
             </h4>
             <ul className="space-y-2">
-              {["Accounting & Zakat", "Company Formation", "Web Development", "App Development", "Social & Ads", "AI Automation"].map(
+              {["Accounting ", "Company Formation", "Web Development", "App Development", "Social & Ads", "AI Automation"].map(
                 (s) => (
                   <li key={s}>
-                    <a href="#services" className="text-gray-600 text-sm hover:text-[#C8A45D] transition">
+                    <a href="/services" className="text-gray-600 text-sm hover:text-gold transition">
                       {s}
                     </a>
                   </li>
                 )
               )}
             </ul>
-          </div>
+          </motion.div>
 
           {/* Industries */}
-          <div>
-            <h4 className="text-[10px] tracking-[3px] text-[#C8A45D] font-semibold mb-5 uppercase">
+          <motion.div variants={itemVariants}>
+            <h4 className="text-[10px] tracking-[3px] text-gold font-semibold mb-5 uppercase">
               Industries
             </h4>
             <ul className="space-y-2">
-              {["Real Estate", "Healthcare", "Construction", "Logistics", "Finance", "Hospitality"].map(
+              {["Real Estate", "Healthcare", "Cafe", "Ecommerce", "Restaurant", "Hospitality"].map(
                 (i) => (
                   <li key={i}>
-                    <a href="#industries" className="text-gray-600 text-sm hover:text-[#C8A45D] transition">
+                    <a href="/industries" className="text-gray-600 text-sm hover:text-gold transition">
                       {i}
                     </a>
                   </li>
                 )
               )}
             </ul>
-          </div>
+          </motion.div>
 
           {/* Contact & Socials */}
-          <div>
-            <h4 className="text-[10px] tracking-[3px] text-[#C8A45D] font-semibold mb-5 uppercase">
+          <motion.div variants={itemVariants}>
+            <h4 className="text-[10px] tracking-[3px] text-gold font-semibold mb-5 uppercase">
               Contact
             </h4>
             <ul className="space-y-3">
               <li>
                 <a
-                  href="https://wa.me/966500000000"
+                  href="https://wa.me/27684615802"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-2 text-gray-600 text-sm hover:text-[#C8A45D] transition"
+                  className="flex items-center gap-2 text-gray-600 text-sm hover:text-gold transition"
                 >
-                  <Send size={14} className="text-[#C8A45D]" />
+                  <Send size={14} className="text-gold" />
                   WhatsApp
                 </a>
               </li>
               <li>
                 <a
                   href="mailto:hello@afzglobal.com"
-                  className="flex items-center gap-2 text-gray-600 text-sm hover:text-[#C8A45D] transition"
+                  className="flex items-center gap-2 text-gray-600 text-sm hover:text-gold transition"
                 >
-                  <Mail size={14} className="text-[#C8A45D]" />
-                  hello@afzglobal.com
+                  <Mail size={14} className="text-gold" />
+                  Info@afzprestige.ksa
                 </a>
               </li>
               <li>
                 <a
-                  href="#contact"
-                  className="flex items-center gap-2 text-gray-600 text-sm hover:text-[#C8A45D] transition"
+                  href="/contact"
+                  className="flex items-center gap-2 text-gray-600 text-sm hover:text-gold transition"
                 >
-                  <MapPin size={14} className="text-[#C8A45D]" />
-                  Riyadh | Jeddah
+        
                 </a>
               </li>
             </ul>
 
-            {/* Social Media Icons with inline SVGs (no lucide-react dependency) */}
+            {/* Social Media Icons */}
             <div className="mt-6">
-              <h4 className="text-[10px] tracking-[3px] text-[#C8A45D] font-semibold mb-3 uppercase">
+              <h4 className="text-[10px] tracking-[3px] text-gold font-semibold mb-3 uppercase">
                 Follow Us
               </h4>
               <div className="flex gap-4">
-                {/* Facebook SVG */}
                 <a
-                  href="https://facebook.com/afzglobal"
+                  href="https://facebook.com/afzglobalksa"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="bg-white/60 p-2 rounded-full border border-[#C8A45D]/30 text-gray-700 hover:bg-[#C8A45D] hover:text-white transition-all duration-300"
+                  className="bg-white/60 p-2 rounded-full border border-gold/30 text-gray-700 hover:bg-gold hover:text-white transition-all duration-300"
                   aria-label="Facebook"
                 >
                   <svg
@@ -130,12 +160,11 @@ export default function Footer() {
                     <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
                   </svg>
                 </a>
-                {/* Instagram SVG */}
                 <a
-                  href="https://instagram.com/afzglobal"
+                  href="https://www.instagram.com/afzglobalksa?igsh=b3Rid3VvcXlpc3Zj&utm_source=qr"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="bg-white/60 p-2 rounded-full border border-[#C8A45D]/30 text-gray-700 hover:bg-[#C8A45D] hover:text-white transition-all duration-300"
+                  className="bg-white/60 p-2 rounded-full border border-gold/30 text-gray-700 hover:bg-gold hover:text-white transition-all duration-300"
                   aria-label="Instagram"
                 >
                   <svg
@@ -156,22 +185,30 @@ export default function Footer() {
                 </a>
               </div>
             </div>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
 
         {/* Bottom Bar */}
-        <div className="pt-6 border-t border-[#C8A45D]/20 flex flex-col md:flex-row justify-between items-center gap-4 text-[11px] text-gray-500">
-          <p>© 2025 AFZ Global — Saudi Arabia. All rights reserved.</p>
-          <div className="font-arabic text-[#C8A45D]/50">رؤية ٢٠٣٠</div>
+        <motion.div
+          initial="hidden"
+          animate={isInView ? "visible" : "hidden"}
+          variants={fadeInUp}
+          className="pt-6 border-t border-gold/20 flex flex-col md:flex-row justify-between items-center gap-4 text-[11px] text-gray-500"
+        >
+          <p>© 2026 AFZ Global — Saudi Arabia. All rights reserved.</p>
+          {/* Vision 2030 Arabic - now darker and more visible */}
+          <div className="font-arabic text-gold/60 font-medium text-sm tracking-wider">
+            رؤية ٢٠٣٠
+          </div>
           <div className="flex gap-4">
-            <a href="#" className="hover:text-[#C8A45D] transition">
+            <a href="#" className="hover:text-gold transition">
               Privacy Policy
             </a>
-            <a href="#" className="hover:text-[#C8A45D] transition">
+            <a href="#" className="hover:text-gold transition">
               Terms of Service
             </a>
           </div>
-        </div>
+        </motion.div>
       </div>
     </footer>
   );

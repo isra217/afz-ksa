@@ -6,6 +6,7 @@ import Industries from "@/components/Industries";
 import Portfolio from "@/components/Portfolio";
 import FloatingChat from "@/components/FloatingChat";
 import Testimonials from "@/components/Testimonials";
+import FAQ from "@/components/faq";
 import ContactForm from "@/components/ContactForm";
 import Footer from "@/components/Footer";
 
@@ -20,6 +21,7 @@ export default function Home() {
       <Portfolio />
       <FloatingChat />
       <Testimonials />
+      <FAQ />
       <ContactForm />
       <Footer />
     </main>

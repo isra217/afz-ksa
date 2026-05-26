@@ -91,7 +91,8 @@ export default function WhyAFZ() {
                 Stop juggling agencies. We deliver everything your Saudi business needs — from branding to AI automation — as one unified system.
               </p>
 
-              <div className="mt-6 text-5xl text-[#C8A45D]/20 font-serif">
+              {/* Darker Arabic word for better visibility */}
+              <div className="mt-6 text-5xl text-[#C8A45D]/70 font-serif">
                 شريكك
               </div>
             </motion.div>

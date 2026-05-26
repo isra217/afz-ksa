@@ -1,8 +1,11 @@
 "use client";
-import { useState } from "react";
+import { useState, useRef } from "react";
+import { motion, useInView } from "framer-motion";
 
 export default function ContactForm() {
   const [submitted, setSubmitted] = useState(false);
+  const sectionRef = useRef<HTMLElement>(null);
+  const isInView = useInView(sectionRef, { once: true, margin: "-50px" });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -10,9 +13,33 @@ export default function ContactForm() {
     setTimeout(() => setSubmitted(false), 3000);
   };
 
+  // Animation variants
+  const fadeInUp = {
+    hidden: { opacity: 0, y: 30 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
+  };
+
+  const formVariants = {
+    hidden: { opacity: 0, x: 30 },
+    visible: { opacity: 1, x: 0, transition: { duration: 0.6, delay: 0.2 } },
+  };
+
+  const listItemVariants = {
+    hidden: { opacity: 0, x: -20 },
+    visible: (i: number) => ({
+      opacity: 1,
+      x: 0,
+      transition: { duration: 0.4, delay: i * 0.1 },
+    }),
+  };
+
   return (
-    <section id="contact" className="relative bg-cream py-24 md:py-28 overflow-hidden">
-      {/* Gold glow backgrounds (same as Services section) */}
+    <section
+      id="contact"
+      ref={sectionRef}
+      className="relative bg-cream py-24 md:py-28 overflow-hidden"
+    >
+      {/* Gold glow backgrounds */}
       <div className="absolute top-10 left-1/4 w-[500px] h-[500px] bg-[#C8A96B]/10 rounded-full blur-[140px] animate-pulse-slow" />
       <div
         className="absolute bottom-10 right-1/4 w-[450px] h-[450px] bg-[#C8A96B]/5 rounded-full blur-[160px] animate-pulse-slow"
@@ -21,22 +48,29 @@ export default function ContactForm() {
 
       <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-12">
         <div className="grid lg:grid-cols-2 gap-16">
-          {/* Left side - text content */}
-          <div>
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-10 h-px bg-gold" />
-              <span className="text-gold text-xs tracking-[4px] uppercase font-semibold">
-                Get Started
-              </span>
-              <div className="w-10 h-px bg-gold" />
+          {/* Left side - animated text content */}
+          <motion.div
+            initial="hidden"
+            animate={isInView ? "visible" : "hidden"}
+            variants={fadeInUp}
+            className="space-y-6"
+          >
+            <div>
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-10 h-px bg-gold" />
+                <span className="text-gold text-xs tracking-[4px] uppercase font-semibold">
+                  Get Started
+                </span>
+                <div className="w-10 h-px bg-gold" />
+              </div>
+              <h2
+                className="text-3xl sm:text-4xl md:text-5xl font-light text-gray-900 leading-[1.15]"
+                style={{ fontFamily: "'Playfair Display', serif" }}
+              >
+                Ready to Build a <span className="text-gold">Smarter</span> Business in Saudi Arabia?
+              </h2>
             </div>
-            <h2
-              className="text-3xl sm:text-4xl md:text-5xl font-light text-gray-900 leading-[1.15] mb-6"
-              style={{ fontFamily: "'Playfair Display', serif" }}
-            >
-              Ready to Build a <span className="text-gold">Smarter</span> Business in Saudi Arabia?
-            </h2>
-            <p className="text-gray-700 mb-8 leading-relaxed">
+            <p className="text-gray-700 leading-relaxed">
               Start with a consultation. Get a full brief. Receive a clear quote. 72-hour refund if you're not fully in — no conditions.
             </p>
             <div className="space-y-3">
@@ -46,16 +80,29 @@ export default function ContactForm() {
                 "Saudi market specialists",
                 "Vision 2030 aligned solutions",
               ].map((item, i) => (
-                <div key={i} className="flex items-center gap-3 text-sm text-gray-700">
+                <motion.div
+                  key={i}
+                  custom={i}
+                  initial="hidden"
+                  animate={isInView ? "visible" : "hidden"}
+                  variants={listItemVariants}
+                  className="flex items-center gap-3 text-sm text-gray-700"
+                >
                   <div className="w-4 h-px bg-gold" />
                   <span>{item}</span>
-                </div>
+                </motion.div>
               ))}
             </div>
-          </div>
+          </motion.div>
 
-          {/* Right side - form */}
-          <form onSubmit={handleSubmit} className="space-y-5">
+          {/* Right side - animated form */}
+          <motion.form
+            onSubmit={handleSubmit}
+            initial="hidden"
+            animate={isInView ? "visible" : "hidden"}
+            variants={formVariants}
+            className="space-y-5"
+          >
             <div className="grid sm:grid-cols-2 gap-5">
               <div>
                 <label className="block text-[10px] tracking-[3px] text-gray-500 uppercase mb-1">
@@ -125,7 +172,7 @@ export default function ContactForm() {
             <p className="text-[9px] text-center text-gray-500 tracking-wider">
               72-HOUR REFUND · NO HIDDEN CONDITIONS
             </p>
-          </form>
+          </motion.form>
         </div>
       </div>
 

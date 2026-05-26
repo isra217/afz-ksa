@@ -15,13 +15,13 @@ export default function Navbar() {
   }, []);
 
   const navLinks = [
-    { name: "Home", href: "#home" },
-    { name: "Services", href: "#services" },
-    { name: "About", href: "#why" },
-    { name: "Industries", href: "#industries" },
-    { name: "Portfolio", href: "#portfolio" },
-    { name: "Contact", href: "#contact" },
-  ];
+  { name: "Home", href: "/" },
+  { name: "Services", href: "/services" },
+  { name: "About", href: "/about" },
+  { name: "Industries", href: "/industries" },
+  { name: "Portfolio", href: "/Portfolio" },
+  { name: "Contact", href: "/contact" },
+];
 
   return (
     <nav
@@ -33,15 +33,16 @@ export default function Navbar() {
     >
       <div className="max-w-7xl mx-auto px-6 md:px-12">
         <div className="flex items-center justify-between h-16 md:h-20">
-          {/* Logo */}
-          <Link href="/" className="flex items-center gap-2 group shrink-0">
-            <div className="relative w-9 h-9">
+          {/* Logo - improved shape: less rounding */}
+          <Link href="/" className="flex items-center gap-3 group shrink-0">
+            <div className="relative w-10 h-10 md:w-12 md:h-12">
               <Image
                 src="/logo.png"
                 alt="AFZ Global"
-                width={36}
-                height={36}
-                className="object-contain rounded-full shadow-sm"
+                fill
+                className="object-contain rounded-lg shadow-md transition-all duration-300 group-hover:shadow-lg"
+                sizes="(max-width: 768px) 40px, 48px"
+                priority
               />
             </div>
             <div>
@@ -64,17 +65,16 @@ export default function Navbar() {
                   className="relative text-sm font-medium text-gray-700 hover:text-gray-900 transition-colors group"
                 >
                   {link.name}
-                  {/* Gold underline on hover */}
                   <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gold transition-all duration-300 group-hover:w-full" />
                 </Link>
               ))}
             </div>
           </div>
 
-          {/* CTA Button - Gold, rounded-full, no arrow */}
+          {/* CTA Button */}
           <div className="hidden md:block">
             <Link
-              href="#contact"
+              href="/contact"
               className="inline-flex items-center justify-center px-6 py-2 rounded-full bg-gold text-white text-sm font-semibold hover:bg-gold-dark transition-all duration-300 hover:scale-105 active:scale-95 shadow-sm hover:shadow-md"
             >
               Start Project

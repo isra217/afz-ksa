@@ -1,105 +1,198 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import {
-  MessageCircle,
-  X,
-  Bot,
-  Send,
-  Phone,
-  CircleDot,
-} from "lucide-react";
+import { MessageCircle, X, Bot, Send, Phone, CircleDot } from "lucide-react";
+
+type Message = {
+  type: "bot" | "user";
+  text: string;
+  suggestions?: string[];
+};
 
 export default function FloatingChat() {
   const [open, setOpen] = useState(false);
   const [input, setInput] = useState("");
-  const [messages, setMessages] = useState<
-    { type: "bot" | "user"; text: string }[]
-  >([
-    {
-      type: "bot",
-      text: "Hi 👋 I'm AFZ AI Assistant. Ask me anything about our services.",
-    },
-  ]);
+  const [typing, setTyping] = useState(false);
+
   const chatBodyRef = useRef<HTMLDivElement>(null);
 
-  // Auto-scroll to bottom when new message arrives
-  useEffect(() => {
-    if (chatBodyRef.current) {
-      chatBodyRef.current.scrollTop = chatBodyRef.current.scrollHeight;
-    }
-  }, [messages]);
+  const WHATSAPP = "https://wa.me/27684615802";
 
-  const generateFakeAIResponse = (msg: string) => {
-    return (
-      "I understand: " +
-      msg +
-      "\n\n👉 (This is a demo response. Connect AI API for real answers.)"
-    );
+  /* ================= INITIAL MESSAGE ================= */
+  const [messages, setMessages] = useState<Message[]>([
+    {
+      type: "bot",
+      text:
+        "Welcome to AFZ Global. Ask anything about our services, pricing, or timelines.",
+      suggestions: [
+        "What services do you offer?",
+        "How much does a website cost?",
+        "How long does development take?",
+        "Contact details",
+      ],
+    },
+  ]);
+
+  /* ================= AUTO SCROLL ================= */
+  useEffect(() => {
+    if (!chatBodyRef.current) return;
+
+    chatBodyRef.current.scrollTo({
+      top: chatBodyRef.current.scrollHeight,
+      behavior: "smooth",
+    });
+  }, [messages, typing]);
+
+  /* ================= INTENT DETECTOR ================= */
+  const detectIntent = (msg: string) => {
+    const text = msg.toLowerCase();
+
+    if (text.match(/service|what do you do|offer/)) return "services";
+    if (text.match(/web|website|site/)) return "website";
+    if (text.match(/app|mobile|ios|android/)) return "app";
+    if (text.match(/price|cost|budget|charges/)) return "pricing";
+    if (text.match(/time|duration|long|weeks|days/)) return "timeline";
+    if (text.match(/seo|marketing|ads/)) return "seo";
+    if (text.match(/ai|automation|bot/)) return "ai";
+    if (text.match(/contact|whatsapp|email/)) return "contact";
+
+    return "unknown";
   };
 
-  const sendMessage = () => {
-    if (!input.trim()) return;
+  /* ================= RESPONSES ================= */
+  const RESPONSES: Record<string, Message> = {
+    services: {
+      text:
+        "We provide website development, mobile apps, SEO, AI automation, accounting, and company setup services.",
+      suggestions: ["Website details", "App details", "AI automation"],
+    },
 
-    const userMsg = input;
+    website: {
+      text:
+        "We build business websites, ecommerce stores, portfolios, and custom platforms. Delivery time is 2–4 weeks depending on requirements.",
+      suggestions: [
+        "Website pricing",
+        "Do you build ecommerce?",
+        "Can you redesign website?",
+      ],
+    },
 
-    setMessages((prev) => [
-      ...prev,
-      { type: "user", text: userMsg },
-      { type: "bot", text: generateFakeAIResponse(userMsg) },
-    ]);
+    app: {
+      text:
+        "We develop Android and iOS apps including business and ecommerce applications. Timeline is 4–8 weeks.",
+      suggestions: ["App pricing", "iOS apps?", "App maintenance?"],
+    },
 
-    setInput("");
+    pricing: {
+      text:
+        "Pricing depends on project requirements. Websites are affordable, apps are medium to high, AI is custom priced.",
+      suggestions: ["Website cost", "App cost", "SEO cost"],
+    },
+
+    timeline: {
+      text:
+        "Timelines vary: websites 2–4 weeks, apps 4–8 weeks, SEO 2–4 months.",
+      suggestions: ["Fast delivery?", "Urgent project?", "Updates?"],
+    },
+
+    seo: {
+      text:
+        "We offer SEO, Google ranking, ads management, and social media marketing services.",
+      suggestions: ["Google Ads?", "Instagram marketing?"],
+    },
+
+    ai: {
+      text:
+        "We build AI automation systems, chatbots, CRM systems, and business workflows.",
+      suggestions: ["Build chatbot?", "AI pricing?"],
+    },
+
+    contact: {
+      text:
+        `Contact us via WhatsApp: ${WHATSAPP}\nOr fill the contact form on our website.`,
+      suggestions: ["Open WhatsApp", "Contact form"],
+    },
   };
 
-  // Close on escape key
-  useEffect(() => {
-    const handleEsc = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setOpen(false);
+  /* ================= FALLBACK ================= */
+  const fallbackResponse = (msg: string): Message => {
+    return {
+      text:
+        "I may not have an exact answer for that, but our team can help you directly.",
+      suggestions: ["Contact on WhatsApp", "Fill contact form", "View services"],
     };
-    window.addEventListener("keydown", handleEsc);
-    return () => window.removeEventListener("keydown", handleEsc);
-  }, []);
+  };
+
+  /* ================= SEND MESSAGE ================= */
+  const sendMessage = (custom?: string) => {
+    const text = (custom || input).trim();
+    if (!text) return;
+
+    setMessages((prev) => [...prev, { type: "user", text }]);
+    setInput("");
+    setTyping(true);
+
+    setTimeout(() => {
+      const intent = detectIntent(text);
+
+      const response =
+        intent === "unknown"
+          ? fallbackResponse(text)
+          : RESPONSES[intent];
+
+      setMessages((prev) => [
+        ...prev,
+        {
+          type: "bot",
+          text: response.text,
+          suggestions: response.suggestions,
+        },
+      ]);
+
+      setTyping(false);
+    }, 500);
+  };
 
   return (
     <>
       {/* WhatsApp Button */}
       <a
-        href="https://wa.me/966500000000"
+        href={WHATSAPP}
         target="_blank"
-        rel="noopener noreferrer"
-        className="fixed bottom-28 right-5 z-50 w-12 h-12 rounded-full bg-green-500 flex items-center justify-center shadow-lg hover:scale-110 transition"
+        className="fixed bottom-28 right-5 z-50 w-14 h-14 bg-green-500 rounded-full flex items-center justify-center shadow-xl"
       >
-        <Phone className="text-white" size={20} />
+        <Phone className="text-white" size={22} />
       </a>
 
-      {/* Chat Toggle Button */}
+      {/* Toggle Button */}
       <button
         onClick={() => setOpen(!open)}
-        className="fixed bottom-8 right-5 z-50 w-12 h-12 rounded-full bg-[#C8A96B] flex items-center justify-center shadow-lg hover:scale-110 transition"
+        className="fixed bottom-8 right-5 z-50 w-14 h-14 bg-[#C8A96B] rounded-full flex items-center justify-center shadow-xl"
       >
         {open ? (
-          <X className="text-white" size={20} />
+          <X className="text-white" />
         ) : (
-          <MessageCircle className="text-white" size={20} />
+          <MessageCircle className="text-white" />
         )}
       </button>
 
-      {/* Chat Window - responsive height */}
+      {/* CHAT WINDOW */}
       <div
-        className={`fixed bottom-28 right-5 z-50 w-[92%] sm:w-[380px] rounded-2xl overflow-hidden shadow-2xl border border-gray-200 transition-all duration-300 ${
+        className={`fixed bottom-28 right-5 z-50 w-[92%] sm:w-[400px] h-[70vh] rounded-2xl overflow-hidden shadow-2xl border bg-white flex flex-col transition-all ${
           open
-            ? "opacity-100 translate-y-0"
-            : "opacity-0 translate-y-10 pointer-events-none"
+            ? "opacity-100"
+            : "opacity-0 pointer-events-none translate-y-10"
         }`}
       >
-        {/* Top Bar */}
-        <div className="bg-[#111] px-4 py-3 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Bot className="text-[#C8A96B]" size={18} />
+        {/* HEADER */}
+        <div className="bg-[#111] px-4 py-4 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <Bot className="text-[#C8A96B]" />
             <div>
-              <p className="text-white text-sm font-semibold">AFZ AI Assistant</p>
-              <div className="flex items-center gap-2 text-xs text-white/60">
+              <p className="text-white text-sm font-semibold">
+                AFZ Global Chat
+              </p>
+              <div className="flex items-center gap-1 text-xs text-white/60">
                 <CircleDot className="text-green-400" size={10} />
                 Online
               </div>
@@ -107,57 +200,67 @@ export default function FloatingChat() {
           </div>
         </div>
 
-        {/* Chat Body - responsive max height */}
+        {/* CHAT BODY */}
         <div
           ref={chatBodyRef}
-          className="bg-[#F7F3EE] max-h-[50vh] sm:max-h-[400px] overflow-y-auto p-4 space-y-3"
+          className="flex-1 overflow-y-auto p-4 bg-[#F7F3EE] space-y-4"
         >
           {messages.map((m, i) => (
-            <div
-              key={i}
-              className={`flex ${m.type === "user" ? "justify-end" : "justify-start"}`}
-            >
+            <div key={i}>
               <div
-                className={`px-3 py-2 rounded-xl text-sm max-w-[85%] whitespace-pre-line ${
-                  m.type === "user"
-                    ? "bg-[#C8A96B] text-white"
-                    : "bg-white text-gray-700 shadow-sm"
+                className={`flex ${
+                  m.type === "user" ? "justify-end" : "justify-start"
                 }`}
               >
-                {m.text}
+                <div
+                  className={`px-4 py-3 rounded-2xl text-sm max-w-[85%] whitespace-pre-line ${
+                    m.type === "user"
+                      ? "bg-[#C8A96B] text-white"
+                      : "bg-white text-gray-700"
+                  }`}
+                >
+                  {m.text}
+                </div>
               </div>
+
+              {/* Suggestions */}
+              {m.type === "bot" && m.suggestions && (
+                <div className="flex flex-wrap gap-2 mt-2">
+                  {m.suggestions.map((s, idx) => (
+                    <button
+                      key={idx}
+                      onClick={() => sendMessage(s)}
+                      className="text-[11px] bg-white border px-3 py-2 rounded-full hover:bg-[#C8A96B] hover:text-white"
+                    >
+                      {s}
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
           ))}
+
+          {typing && (
+            <div className="text-xs text-gray-500">typing...</div>
+          )}
         </div>
 
-        {/* Input Area */}
-        <div className="bg-white p-3 border-t flex items-center gap-2">
+        {/* INPUT */}
+        <div className="p-3 border-t bg-white flex gap-2">
           <input
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && sendMessage()}
-            placeholder="Type your message..."
-            className="flex-1 text-sm px-3 py-2 border rounded-xl outline-none focus:border-[#C8A96B]"
+            placeholder="Ask something..."
+            className="flex-1 border rounded-xl px-3 py-2 text-sm"
           />
-          <button
-            onClick={sendMessage}
-            className="w-10 h-10 rounded-xl bg-[#C8A96B] flex items-center justify-center hover:scale-105 transition"
-          >
-            <Send size={16} className="text-white" />
-          </button>
-        </div>
 
-        {/* Footer */}
-        <div className="p-2 bg-white border-t">
-          <a
-            href="https://wa.me/966500000000"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-xs flex items-center justify-center gap-2 text-green-600 font-medium"
+          <button
+            onClick={() => sendMessage()}
+            className="w-10 h-10 bg-[#C8A96B] rounded-xl flex items-center justify-center"
           >
-            <Phone size={14} />
-            Need human support? Contact on WhatsApp
-          </a>
+            <Send className="text-white" size={16} />
+          </button>
         </div>
       </div>
     </>

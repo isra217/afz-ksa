@@ -7,10 +7,13 @@ import { useEffect, useState, useRef } from "react";
 
 const images = [
   "/1.jpg",
-  "https://images.unsplash.com/photo-1521737604893-d14cc237f11d?q=80&w=1600&auto=format&fit=crop", // modern corporate meeting
-  "https://images.unsplash.com/photo-1551836022-d5d88e9218df?q=80&w=1600&auto=format&fit=crop", // Saudi-style business skyline vibe
+  "https://images.unsplash.com/photo-1521737604893-d14cc237f11d?q=80&w=1600&auto=format&fit=crop",
+  "/4.jpg", 
+  "/5.jpg",
+  "/3.jpg", 
   "https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=1600&auto=format&fit=crop", // office teamwork
-  "https://images.unsplash.com/photo-1559136555-9303baea8ebd?q=80&w=1600&auto=format&fit=crop", // AI / tech workspace
+  "https://images.unsplash.com/photo-1559136555-9303baea8ebd?q=80&w=1600&auto=format&fit=crop", 
+  
   "https://images.unsplash.com/photo-1520607162513-77705c0f0d4a?q=80&w=1600&auto=format&fit=crop", // executive meeting / consulting
 ];
 
