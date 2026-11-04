@@ -1,36 +1,141 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# AFZ KSA – Corporate Business Website
 
-## Getting Started
+A modern, responsive, and premium corporate website developed for **AFZ Global's Saudi Arabia market**, designed to showcase professional business services and enhance the company's digital presence.
 
-First, run the development server:
+ **Live Website:** https://afz-ksa.vercel.app/  
+ **GitHub Repository:** https://github.com/isra217/afz-ksa
+
+---
+
+##  About the Project
+
+AFZ KSA is a corporate website developed to present AFZ Global's business solutions and services to clients in Saudi Arabia.
+
+The website features a premium black-and-gold visual identity inspired by modern corporate branding and Saudi Arabia's business environment.
+
+It provides visitors with an engaging browsing experience, organized service information, and an integrated chatbot to improve customer interaction and assistance.
+
+---
+
+##  Key Features
+
+- **Premium UI Design:** Modern black-and-gold theme with an elegant corporate appearance.
+- **Responsive Design:** Optimized for desktop, tablet, and mobile devices.
+- **AI-Powered Chatbot:** Integrated conversational chatbot to interact with website visitors.
+- **Interactive Customer Support:** Allows visitors to ask questions and receive assistance through the chatbot.
+- **Business Services:** Professional presentation of the company's services and solutions.
+- **Corporate Branding:** Design tailored to AFZ Global's Saudi Arabia market.
+- **User-Friendly Navigation:** Clean layout and intuitive navigation experience.
+- **Modern Animations:** Smooth visual interactions for an engaging user experience.
+
+---
+
+##  Chatbot Integration
+
+The website includes an interactive chatbot designed to improve visitor engagement and provide convenient customer assistance.
+
+### Chatbot Functionality
+
+- Interactive conversations with website visitors.
+- Assistance with service-related questions.
+- Provides information about business services.
+- Helps visitors find relevant information.
+- Enhances customer engagement through conversational interaction.
+- Offers an additional communication channel for website visitors.
+
+---
+
+##  Tech Stack
+
+The project is built using modern web development technologies:
+
+| Technology | Purpose |
+|---|---|
+| Next.js | React framework and application development |
+| React.js | Component-based UI development |
+| TypeScript | Type-safe development |
+| Tailwind CSS | Responsive styling and UI design |
+| JavaScript | Interactive functionality |
+| Vercel | Website deployment and hosting |
+
+---
+
+##  Design Highlights
+
+- Premium black-and-gold color palette.
+- Modern corporate website layout.
+- Clean typography and structured content.
+- Responsive components.
+- Professional business-oriented user interface.
+- Interactive chatbot experience.
+
+---
+
+##  Getting Started
+
+Follow these steps to run the project locally.
+
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/isra217/afz-ksa.git
+```
+
+### 2. Navigate to the Project Directory
+
+```bash
+cd afz-ksa
+```
+
+### 3. Install Dependencies
+
+```bash
+npm install
+```
+
+### 4. Start the Development Server
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 5. Open in Browser
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Visit:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```text
+http://localhost:3000
+```
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
+## ---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+##  Deployment
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+The project is deployed using **Vercel**, providing reliable hosting and deployment for the Next.js application.
 
-## Deploy on Vercel
+🔗 **Live Website:** https://afz-ksa.vercel.app/
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+##  Developer
+
+**Esha Saleem**  
+Junior Web Developer
+
+- **GitHub:** https://github.com/isra217
+- **Project:** AFZ KSA
+- **Repository:** https://github.com/isra217/afz-ksa
+
+---
+
+##  Project Purpose
+
+This project demonstrates practical experience in modern web development, responsive UI design, corporate website development, and chatbot integration.
+
+It reflects the use of modern frontend technologies to create professional digital experiences for businesses.
+
+---
+
+
